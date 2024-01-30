@@ -1,9 +1,8 @@
 package com.example.main
 
-import android.annotation.SuppressLint
-import android.content.ClipDescription
-import android.icu.text.CaseMap.Title
+import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -15,32 +14,41 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
+import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -55,31 +63,51 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.main.ui.theme.MainTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            var textFieldState = remember {
+                mutableStateOf("")
+            }
             MainTheme {
+
+                //Snackbar
+                SnackbarsTextFieldsButtons(
+                    snackbarHostState = remember {
+                        SnackbarHostState()
+                    },
+                    coroutine = rememberCoroutineScope(),
+                    context = LocalContext.current,
+                    textFieldState = textFieldState,
+                    keyboardController = LocalSoftwareKeyboardController.current,
+                    focusManager = LocalFocusManager.current
+                )
+
                 //State Compose
-                Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
-                    val backgroundColor = remember {
-                        mutableStateOf(Color.Yellow)
-                    }
-                    StateCompose(
-                        modifier =  Modifier
-                            .fillMaxWidth()
-                            .height(200.dp)
-                    ){
-                        backgroundColor.value = it
-                    }
-                    Box(modifier = Modifier
-                        .background(backgroundColor.value)
-                        .fillMaxWidth()
-                        .height(200.dp)
-                    )
-                }
+                //Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                //val backgroundColor = remember {
+                //    mutableStateOf(Color.Yellow)
+                //}
+                //StateCompose(
+                //     modifier = Modifier
+                //          .fillMaxWidth()
+                //          .height(200.dp),
+                //          stateColor = {
+                //           backgroundColor.value = it
+                //          }
+                //)
+                //Box(modifier = Modifier
+                //    .background(backgroundColor.value)
+                //    .fillMaxWidth()
+                //    .height(200.dp)
+                //)
+                //}
 
                 //Styling Text
                 //StylingText()
@@ -243,10 +271,72 @@ fun StateCompose(modifier: Modifier = Modifier, stateColor: (Color) -> Unit){
                     1f
                 )
             )
-        }) {
-
+        },
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text = "Press the Button", color = Color.White, fontWeight = FontWeight.Medium)
     }
 }
+
+//Textfields, Buttons & Showing Snackbars
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@Composable
+fun SnackbarsTextFieldsButtons(
+    snackbarHostState: SnackbarHostState, coroutine: CoroutineScope, context: Context, textFieldState: MutableState<String>,
+    keyboardController: SoftwareKeyboardController?, focusManager: FocusManager
+){
+    Scaffold(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) {
+            Snackbar(
+                snackbarData = it,
+                containerColor = Color.DarkGray,
+                contentColor = Color.White,
+                actionColor = Color.White,
+                dismissActionContentColor = Color.White
+            )
+        }
+        },
+        modifier = Modifier.fillMaxSize(),
+        content = {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                TextField(
+                    value = textFieldState.value,
+                    label = {
+                        Text(text = "Input Your Nsame")
+                    },
+                    onValueChange = {
+                        textFieldState.value = it.toString()
+                    }
+                )
+                Button(onClick = {
+                    coroutine.launch {
+                        val result = snackbarHostState.showSnackbar(
+                            message = "Hello $textFieldState",
+                            actionLabel = "Show the Toast",
+                            duration = SnackbarDuration.Long,
+                            withDismissAction = true
+                        )
+                        if (result == SnackbarResult.ActionPerformed){
+                            Toast.makeText(context,"Hello Welcome Back",Toast.LENGTH_LONG).show()
+                        }
+                    }
+                    keyboardController?.hide()
+                    focusManager.clearFocus()
+                }) {
+                    Text(text = "Show the snackbar message")
+                }
+            }
+        }
+    )
+}
+
+
 
 @Preview(showBackground = true)
 @Composable
