@@ -1,5 +1,6 @@
 package com.example.main
 
+import android.annotation.SuppressLint
 import android.content.ClipDescription
 import android.icu.text.CaseMap.Title
 import android.os.Bundle
@@ -30,6 +31,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -52,15 +55,34 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.main.ui.theme.MainTheme
+import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MainTheme {
+                //State Compose
+                Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+                    val backgroundColor = remember {
+                        mutableStateOf(Color.Yellow)
+                    }
+                    StateCompose(
+                        modifier =  Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                    ){
+                        backgroundColor.value = it
+                    }
+                    Box(modifier = Modifier
+                        .background(backgroundColor.value)
+                        .fillMaxWidth()
+                        .height(200.dp)
+                    )
+                }
 
                 //Styling Text
-                StylingText()
+                //StylingText()
 
                 //ImageCard
                 //ImageCard(painter = painterResource(id = R.drawable.milli_2l0cwtpcchi_unsplash), contentDescription = "Doogy", title = "My Doggy is cutee!!")
@@ -203,6 +225,27 @@ fun StylingText(){
         fontStyle = FontStyle.Normal,
         textDecoration = TextDecoration.Underline
     )
+}
+
+//State Compose
+@Composable
+fun StateCompose(modifier: Modifier = Modifier, stateColor: (Color) -> Unit){
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .height(200.dp)
+        .background(Color.Red)
+        .clickable {
+            stateColor(
+                Color(
+                    Random.nextFloat(),
+                    Random.nextFloat(),
+                    Random.nextFloat(),
+                    1f
+                )
+            )
+        }) {
+
+    }
 }
 
 @Preview(showBackground = true)
