@@ -193,6 +193,7 @@ fun StylingText(){
             ){
                 append("ME!")
             }
+            append("\n How are you today?")
         },
         fontSize = 30.sp,
         color = Color.Black,
