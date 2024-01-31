@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,6 +20,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
@@ -36,7 +39,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -45,9 +47,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -62,6 +62,10 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ChainStyle
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintSet
+import androidx.constraintlayout.compose.Dimension
 import com.example.main.ui.theme.MainTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -77,17 +81,45 @@ class MainActivity : ComponentActivity() {
             }
             MainTheme {
 
-                //Snackbar
-                SnackbarsTextFieldsButtons(
-                    snackbarHostState = remember {
-                        SnackbarHostState()
+                //ConstraintLayout
+                ConstraintLayouts(
+                    constraints = ConstraintSet {
+                        val greenBox = createRefFor("greenBox")
+                        val redBox = createRefFor("redBox")
+                        val guidelineFromTop = createGuidelineFromTop(0.5f)
+                        constrain(greenBox){
+                            top.linkTo(guidelineFromTop)
+                            start.linkTo(parent.start)
+                            width = Dimension.value(100.dp)
+                            height = Dimension.value(100.dp)
+                        }
+                        constrain(redBox){
+                            top.linkTo(parent.top)
+                            start.linkTo(greenBox.end)
+                            end.linkTo(parent.end)
+                            width = Dimension.value(100.dp)
+                            height = Dimension.value(100.dp)
+                        }
+                        createHorizontalChain(greenBox,redBox, chainStyle = ChainStyle.Packed)
+                        //createVerticalChain(greenBox,redBox)
                     },
-                    coroutine = rememberCoroutineScope(),
-                    context = LocalContext.current,
-                    textFieldState = textFieldState,
-                    keyboardController = LocalSoftwareKeyboardController.current,
-                    focusManager = LocalFocusManager.current
+                    modifier = Modifier
                 )
+
+                //Lists
+                //Lists(scrollState = rememberScrollState())
+
+                //Textfields, Buttons & Showing Snackbars
+                //                SnackbarsTextFieldsButtons(
+                //                    snackbarHostState = remember {
+                //                        SnackbarHostState()
+                //                    },
+                //                    coroutine = rememberCoroutineScope(),
+                //                    context = LocalContext.current,
+                //                    textFieldState = textFieldState,
+                //                    keyboardController = LocalSoftwareKeyboardController.current,
+                //                    focusManager = LocalFocusManager.current
+                //                )
 
                 //State Compose
                 //Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
@@ -297,7 +329,7 @@ fun SnackbarsTextFieldsButtons(
         }
         },
         modifier = Modifier.fillMaxSize(),
-        content = {
+        content = { it ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -310,7 +342,7 @@ fun SnackbarsTextFieldsButtons(
                     label = {
                         Text(text = "Input Your Nsame")
                     },
-                    onValueChange = {
+                    onValueChange = {it ->
                         textFieldState.value = it.toString()
                     }
                 )
@@ -334,6 +366,35 @@ fun SnackbarsTextFieldsButtons(
             }
         }
     )
+}
+
+//Lists
+@Composable
+fun Lists(scrollState:ScrollState){
+    //verticalScroll
+    //    Column(modifier = Modifier.verticalScroll(scrollState)) {
+    //        for (i in 1..50){
+    //            Text(text = "Item $i", modifier = Modifier.fillMaxSize())
+    //        }
+    //    }
+
+    //LazyColumn & ItemsIndexed
+    LazyColumn(){
+        itemsIndexed(
+            listOf("this","is","your","mental")
+        ){index, item ->
+            Text(text = "Item $item", modifier = Modifier.fillMaxSize())
+        }
+    }
+}
+
+//ConstraintLayout
+@Composable
+fun ConstraintLayouts(constraints: ConstraintSet, modifier: Modifier){
+    ConstraintLayout(constraints, modifier.fillMaxSize()) {
+        Box(modifier.background(Color.Green).layoutId("greenBox"))
+        Box(modifier.background(Color.Red).layoutId("redBox"))
+    }
 }
 
 
