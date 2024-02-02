@@ -66,6 +66,7 @@ import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
+import com.example.main.simpleAnimations.SimpleAnimations
 import com.example.main.ui.theme.MainTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -81,30 +82,33 @@ class MainActivity : ComponentActivity() {
             }
             MainTheme {
 
+                //Simple Animation
+                SimpleAnimations()
+
                 //ConstraintLayout
-                ConstraintLayouts(
-                    constraints = ConstraintSet {
-                        val greenBox = createRefFor("greenBox")
-                        val redBox = createRefFor("redBox")
-                        val guidelineFromTop = createGuidelineFromTop(0.5f)
-                        constrain(greenBox){
-                            top.linkTo(guidelineFromTop)
-                            start.linkTo(parent.start)
-                            width = Dimension.value(100.dp)
-                            height = Dimension.value(100.dp)
-                        }
-                        constrain(redBox){
-                            top.linkTo(parent.top)
-                            start.linkTo(greenBox.end)
-                            end.linkTo(parent.end)
-                            width = Dimension.value(100.dp)
-                            height = Dimension.value(100.dp)
-                        }
-                        createHorizontalChain(greenBox,redBox, chainStyle = ChainStyle.Packed)
+                //ConstraintLayouts(
+                    //constraints = ConstraintSet {
+                        //val greenBox = createRefFor("greenBox")
+                        //val redBox = createRefFor("redBox")
+                        //val guidelineFromTop = createGuidelineFromTop(0.5f)
+                        //constrain(greenBox){
+                            //top.linkTo(guidelineFromTop)
+                            //start.linkTo(parent.start)
+                            //width = Dimension.value(100.dp)
+                            //height = Dimension.value(100.dp)
+                        //}
+                        //constrain(redBox){
+                            //top.linkTo(parent.top)
+                            //start.linkTo(greenBox.end)
+                            //end.linkTo(parent.end)
+                            //width = Dimension.value(100.dp)
+                            //height = Dimension.value(100.dp)
+                        //}
+                        //createHorizontalChain(greenBox,redBox, chainStyle = ChainStyle.Packed)
                         //createVerticalChain(greenBox,redBox)
-                    },
-                    modifier = Modifier
-                )
+                    //},
+                    //modifier = Modifier
+                //)
 
                 //Lists
                 //Lists(scrollState = rememberScrollState())
@@ -392,8 +396,14 @@ fun Lists(scrollState:ScrollState){
 @Composable
 fun ConstraintLayouts(constraints: ConstraintSet, modifier: Modifier){
     ConstraintLayout(constraints, modifier.fillMaxSize()) {
-        Box(modifier.background(Color.Green).layoutId("greenBox"))
-        Box(modifier.background(Color.Red).layoutId("redBox"))
+        Box(
+            modifier
+                .background(Color.Green)
+                .layoutId("greenBox"))
+        Box(
+            modifier
+                .background(Color.Red)
+                .layoutId("redBox"))
     }
 }
 
