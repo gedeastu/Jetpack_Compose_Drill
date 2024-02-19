@@ -56,24 +56,6 @@ fun BMIScreen(modifier: Modifier = Modifier){
     var gender by remember {
         mutableStateOf(radioOptions[0])
     }
-    fun countBMI(berat: Float,tinggi: Float):Float{
-        return berat / ( tinggi / 100 ).pow(2)
-    }
-    fun getKategori(bmi: Float, isMale: Boolean): Int{
-        return if (isMale){
-            when{
-                bmi < 20.5 -> R.string.kurus
-                bmi > 27.0 -> R.string.gemuk
-                else -> R.string.ideal
-            }
-        }else{
-            when{
-                bmi < 18.5 -> R.string.kurus
-                bmi >= 25.0 -> R.string.gemuk
-                else -> R.string.ideal
-            }
-        }
-    }
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -168,5 +150,24 @@ fun GenderOptions(label:String, isSelected:Boolean, modifier: Modifier){
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(start = 2.dp)
         )
+    }
+}
+
+private fun countBMI(berat: Float,tinggi: Float):Float{
+    return berat / ( tinggi / 100 ).pow(2)
+}
+private fun getKategori(bmi: Float, isMale: Boolean): Int{
+    return if (isMale){
+        when{
+            bmi < 20.5 -> R.string.kurus
+            bmi > 27.0 -> R.string.gemuk
+            else -> R.string.ideal
+        }
+    }else{
+        when{
+            bmi < 18.5 -> R.string.kurus
+            bmi >= 25.0 -> R.string.gemuk
+            else -> R.string.ideal
+        }
     }
 }
