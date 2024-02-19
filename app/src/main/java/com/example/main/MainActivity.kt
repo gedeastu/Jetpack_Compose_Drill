@@ -39,6 +39,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -48,6 +49,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -66,6 +70,7 @@ import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
+import com.example.main.BMIapp.BMIScreen
 import com.example.main.simpleAnimations.SimpleAnimations
 import com.example.main.ui.theme.MainTheme
 import kotlinx.coroutines.CoroutineScope
@@ -81,9 +86,10 @@ class MainActivity : ComponentActivity() {
                 mutableStateOf("")
             }
             MainTheme {
+                BMIScreen()
 
                 //Simple Animation
-                SimpleAnimations()
+                //SimpleAnimations()
 
                 //ConstraintLayout
                 //ConstraintLayouts(
@@ -114,16 +120,16 @@ class MainActivity : ComponentActivity() {
                 //Lists(scrollState = rememberScrollState())
 
                 //Textfields, Buttons & Showing Snackbars
-                //                SnackbarsTextFieldsButtons(
-                //                    snackbarHostState = remember {
-                //                        SnackbarHostState()
-                //                    },
-                //                    coroutine = rememberCoroutineScope(),
-                //                    context = LocalContext.current,
-                //                    textFieldState = textFieldState,
-                //                    keyboardController = LocalSoftwareKeyboardController.current,
-                //                    focusManager = LocalFocusManager.current
-                //                )
+//                                SnackbarsTextFieldsButtons(
+//                                    snackbarHostState = remember {
+//                                        SnackbarHostState()
+//                                    },
+//                                    coroutine = rememberCoroutineScope(),
+//                                    context = LocalContext.current,
+//                                    textFieldState = textFieldState,
+//                                    keyboardController = LocalSoftwareKeyboardController.current,
+//                                    focusManager = LocalFocusManager.current
+//                                )
 
                 //State Compose
                 //Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
@@ -353,7 +359,7 @@ fun SnackbarsTextFieldsButtons(
                 Button(onClick = {
                     coroutine.launch {
                         val result = snackbarHostState.showSnackbar(
-                            message = "Hello $textFieldState",
+                            message = "Hello ${textFieldState.value}",
                             actionLabel = "Show the Toast",
                             duration = SnackbarDuration.Long,
                             withDismissAction = true
