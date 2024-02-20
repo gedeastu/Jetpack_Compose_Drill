@@ -65,4 +65,7 @@
     <string name="Keliling_x">
         Keliling: %1$.2f
     </string>
+    <string name="Reset">
+        Reset
+    </string>
 </resources>

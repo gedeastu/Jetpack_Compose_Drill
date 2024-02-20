@@ -38,6 +38,8 @@ fun SquareFormulaScreen(){
     var keliling by remember {
         mutableStateOf(0f)
     }
+    val reset = ""
+    val resetFloat = 0f
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(16.dp)){
@@ -45,6 +47,7 @@ fun SquareFormulaScreen(){
         Text(text = stringResource(id = R.string.square_formula_intro), modifier = Modifier.padding(bottom = 10.dp))
 
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()){
+
             OutlinedTextField(
                 value = panjang,
                 onValueChange = {panjang = it},
@@ -71,11 +74,24 @@ fun SquareFormulaScreen(){
                 ),
                 modifier = Modifier.fillMaxWidth()
             )
-            Button(onClick = {
-                luas = luasFormula(panjang.toFloat(),lebar.toFloat())
-                keliling = kelilingFormula(panjang.toFloat(),lebar.toFloat())
-            },modifier = Modifier.padding(bottom = 20.dp, top = 20.dp),) {
-                Text(text = stringResource(id = R.string.Hitung))
+
+            Column(modifier = Modifier.padding(bottom = 20.dp, top = 20.dp)) {
+                Button(onClick = {
+                    luas = luasFormula(panjang.toFloat(),lebar.toFloat())
+                    keliling = kelilingFormula(panjang.toFloat(),lebar.toFloat())
+                },) {
+                    Text(text = stringResource(id = R.string.Hitung))
+                }
+                if (keliling != 0f && luas != 0f){
+                    Button(onClick = {
+                        panjang = reset
+                        lebar = reset
+                        keliling = resetFloat
+                        luas = resetFloat
+                    }) {
+                        Text(text = stringResource(id = R.string.Reset))
+                    }
+                }
             }
 
             if (keliling != 0f && luas != 0f){
