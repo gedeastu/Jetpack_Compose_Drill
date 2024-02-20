@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Main</string>
+
+    <!--BMI Strings values-->
     <string name="bmi_intro">
         BMI, atau Body Mass Index merupakan cara untuk menentukan apakah berat badanmu ideal atau tidak. Cobalah sekarang!
     </string>
@@ -33,5 +35,34 @@
     </string>
     <string name="gemuk">
         Gemuk
+    </string>
+    <string name="input_invalid">
+        Tidak Boleh Kosong
+    </string>
+
+    <!--Square Formula Strings values-->
+    <string name="square_formula_intro">
+        Mari menghitung luas dan keliling persegi panjang! Masukkan data berikut :
+    </string>
+    <string name="panjang">
+        Panjang
+    </string>
+    <string name="Lebar">
+        Lebar
+    </string>
+    <string name="Hitung">
+        Hitung
+    </string>
+    <string name="Luas">
+        Luas
+    </string>
+    <string name="Luas_x">
+        Luas: %1$.2f
+    </string>
+    <string name="Keliling">
+        Keliling
+    </string>
+    <string name="Keliling_x">
+        Keliling: %1$.2f
     </string>
 </resources>

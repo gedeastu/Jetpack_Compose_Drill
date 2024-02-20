@@ -1,4 +1,4 @@
-package com.example.main.BMIapp
+package com.example.main.bmiApp
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -26,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -35,13 +36,20 @@ import kotlin.math.pow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BMIScreen(modifier: Modifier = Modifier){
+@JvmName("bmiScreenMain")
+fun BmiScreen() {
 
     var berat by remember {
         mutableStateOf("")
     }
+    var beratError by remember {
+        mutableStateOf(false)
+    }
     var tinggi by remember {
         mutableStateOf("")
+    }
+    var tinggiError by remember {
+        mutableStateOf(false)
     }
     var bmi by remember {
         mutableStateOf(0f)
@@ -53,9 +61,10 @@ fun BMIScreen(modifier: Modifier = Modifier){
         stringResource(id = R.string.pria),
         stringResource(id = R.string.wanita)
     )
-    var gender by remember {
+    val gender by remember {
         mutableStateOf(radioOptions[0])
     }
+
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -86,8 +95,10 @@ fun BMIScreen(modifier: Modifier = Modifier){
                 .fillMaxWidth()
                 .padding(vertical = 10.dp),
             trailingIcon = {
-                Text(text = stringResource(id = R.string.kg))
+                IconPicker(isError = beratError, unit = "Kg")
             },
+            isError = beratError,
+            supportingText = { ErrorHint(isError = beratError) }
         )
 
         //TextField Tinggi
@@ -108,8 +119,10 @@ fun BMIScreen(modifier: Modifier = Modifier){
                 .fillMaxWidth()
                 .padding(bottom = 10.dp),
             trailingIcon = {
-                Text(text = stringResource(id = R.string.cm))
+                IconPicker(isError = tinggiError, unit = "Cm")
             },
+            isError = tinggiError,
+            supportingText = { ErrorHint(isError = tinggiError) }
         )
 
         //Radio
@@ -118,23 +131,31 @@ fun BMIScreen(modifier: Modifier = Modifier){
             .border(1.dp, Color.Gray, RoundedCornerShape(4.dp))
             .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround){
             radioOptions.forEach{ value ->
-                GenderOptions(label = value, isSelected = gender == value, modifier = Modifier
-                    .selectable(
-                        selected = gender == value,
-                        onClick = { gender = value },
-                        role = Role.RadioButton
-                    )
-                    .weight(1f)
-                    .padding(16.dp))
+                GenderOptions(
+                    label = value, isSelected = gender == value
+                )
             }
+        }
 
-            //Tombol Counting
-            Button(onClick = {
-                bmi = countBMI(berat = berat.toFloat(), tinggi = tinggi.toFloat())
-                kategori = getKategori( bmi = bmi, isMale = gender == radioOptions[0])
-            }, modifier = Modifier.padding(top = 8.dp), contentPadding = PaddingValues(horizontal = 32.dp)) {
-                Text(text = stringResource(id = R.string.hitung))
-            }
+        //Tombol Counting
+        Button(onClick = {
+            beratError = (berat == ""||berat == "0")
+            tinggiError = (tinggi == ""||tinggi == "0")
+            bmi = countBMI(berat = berat.toFloat(), tinggi = tinggi.toFloat())
+            kategori = getKategori( bmi = bmi, isMale = gender == radioOptions[0])
+            print(bmi)
+            print(kategori)
+        }, modifier = Modifier.padding(top = 8.dp), contentPadding = PaddingValues(horizontal = 32.dp)) {
+            Text(text = stringResource(id = R.string.hitung))
+        }
+
+        if (bmi != 0f){
+            Divider(
+                modifier = Modifier.padding(vertical = 8.dp),
+                thickness = 1.dp
+            )
+            Text(text = stringResource(id = R.string.bmi_x, bmi), style = MaterialTheme.typography.titleLarge)
+            Text(text = stringResource(id = kategori).uppercase(), style = MaterialTheme.typography.headlineLarge)
         }
     }
 
@@ -142,14 +163,30 @@ fun BMIScreen(modifier: Modifier = Modifier){
 
 
 @Composable
-fun GenderOptions(label:String, isSelected:Boolean, modifier: Modifier){
+fun GenderOptions(label: String, isSelected: Boolean){
     Row(modifier = Modifier, verticalAlignment = Alignment.CenterVertically){
-        RadioButton(selected = isSelected, onClick = {  })
+        RadioButton(selected = isSelected, onClick = null)
         Text(
             text = label,
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(start = 2.dp)
         )
+    }
+}
+
+@Composable
+fun IconPicker(isError: Boolean, unit: String){
+    if (isError){
+        androidx.compose.material3.Icon(imageVector = Icons.Filled.Warning, contentDescription = "warning")
+    }else{
+        Text(text = unit)
+    }
+}
+
+@Composable
+fun ErrorHint(isError:Boolean){
+    if (isError){
+        Text(text = stringResource(id = R.string.input_invalid))
     }
 }
 
