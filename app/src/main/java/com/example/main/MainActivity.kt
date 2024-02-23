@@ -65,6 +65,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import com.example.main.bmiApp.BmiScreen
+import com.example.main.counterButton.CounterButton
 import com.example.main.squareFormula.SquareFormulaScreen
 import com.example.main.ui.theme.MainTheme
 import kotlinx.coroutines.CoroutineScope
@@ -80,7 +81,9 @@ class MainActivity : ComponentActivity() {
                 mutableStateOf("")
             }
             MainTheme {
-                SquareFormulaScreen()
+                CounterButton()
+
+                //SquareFormulaScreen()
 
                 //BmiScreen()
 
