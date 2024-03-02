@@ -15,18 +15,25 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
@@ -42,6 +49,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -64,9 +72,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
-import com.example.main.bmiApp.BmiScreen
 import com.example.main.counterButton.CounterButton
-import com.example.main.squareFormula.SquareFormulaScreen
 import com.example.main.ui.theme.MainTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -77,11 +83,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            var textFieldState = remember {
-                mutableStateOf("")
-            }
             MainTheme {
-                CounterButton()
+                //CounterButton()
 
                 //SquareFormulaScreen()
 
@@ -116,7 +119,7 @@ class MainActivity : ComponentActivity() {
                 //)
 
                 //Lists
-                //Lists(scrollState = rememberScrollState())
+                Lists(scrollState = rememberScrollState())
 
                 //Textfields, Buttons & Showing Snackbars
 //                                SnackbarsTextFieldsButtons(
@@ -326,6 +329,9 @@ fun SnackbarsTextFieldsButtons(
     snackbarHostState: SnackbarHostState, coroutine: CoroutineScope, context: Context, textFieldState: MutableState<String>,
     keyboardController: SoftwareKeyboardController?, focusManager: FocusManager
 ){
+    var textFieldState = remember {
+        mutableStateOf("")
+    }
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) {
             Snackbar(
@@ -388,12 +394,44 @@ fun Lists(scrollState:ScrollState){
     //    }
 
     //LazyColumn & ItemsIndexed
-    LazyColumn(){
-        itemsIndexed(
-            listOf("this","is","your","mental")
-        ){index, item ->
-            Text(text = "Item $item", modifier = Modifier.fillMaxSize())
-        }
+    //LazyColumn(){
+    //    itemsIndexed(
+    //        listOf("this","is","your","mental")
+    //    ){index, item ->
+    //        Text(text = "Item $item", modifier = Modifier.fillMaxSize())
+    //    }
+    //}
+
+    //LazyGrid
+    val stateLazyGrid = rememberLazyGridState(
+        initialFirstVisibleItemIndex = 99
+    )
+    Scaffold(
+        //floatingActionButton = {
+        //    FloatingActionButton(content = {
+        //        Text(text = "Go to Item 99")
+        //    }, onClick = { stateLazyGrid.animateScrollToItem(99) })
+        //}
+    ){ paddingValues ->
+        LazyVerticalGrid(
+            modifier = Modifier.padding(paddingValues = paddingValues),
+            //GridCells.Fixed() is for item grid based on count int type
+            columns = GridCells.Fixed(2),
+            state = stateLazyGrid,
+
+            //GridCells.Adaptive() is for item grid based on dp value
+            //columns = GridCells.Adaptive(200.dp),
+            content = {
+                items(100){id ->
+                    Box(modifier = Modifier
+                        .padding(8.dp)
+                        .aspectRatio(1f)
+                        .clip(RoundedCornerShape(5.dp))
+                        .background(Color.Green), contentAlignment = Alignment.Center){
+                        Text(text = "Hello $id")
+                    }
+                }
+            })
     }
 }
 
