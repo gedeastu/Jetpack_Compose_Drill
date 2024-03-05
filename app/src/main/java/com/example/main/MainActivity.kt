@@ -44,8 +44,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -72,18 +75,32 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
+import com.example.main.animalPictures.Hewan
 import com.example.main.counterButton.CounterButton
+import com.example.main.imageCompose.SimpleImage
+import com.example.main.stateHoisting.Counter
 import com.example.main.ui.theme.MainTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
+
+    private val data = getData()
     @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MainTheme {
+                //var number by remember {
+                //    mutableIntStateOf(0)
+                //}
+                //Counter(number = number, onCounter = {
+                //    number++
+                //})
+
+                //SimpleImage()
+
                 //CounterButton()
 
                 //SquareFormulaScreen()
@@ -119,7 +136,7 @@ class MainActivity : ComponentActivity() {
                 //)
 
                 //Lists
-                Lists(scrollState = rememberScrollState())
+                //Lists(scrollState = rememberScrollState())
 
                 //Textfields, Buttons & Showing Snackbars
 //                                SnackbarsTextFieldsButtons(
@@ -173,6 +190,15 @@ class MainActivity : ComponentActivity() {
                 //}
             }
         }
+    }
+    private fun getData(): List<Hewan>{
+        return listOf(
+            Hewan("Ayam", R.drawable.ayam),
+            Hewan("Bebek", R.drawable.bebek),
+            Hewan("Domba", R.drawable.domba),
+            Hewan("Kambing", R.drawable.kambing),
+            Hewan("Sapi", R.drawable.sapi)
+        )
     }
 }
 
