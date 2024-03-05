@@ -77,6 +77,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import com.example.main.animalPictures.GaleriHewan
 import com.example.main.animalPictures.Hewan
+import com.example.main.animalPictures.challenge.Lamp
+import com.example.main.animalPictures.challenge.SmartLamp
 import com.example.main.counterButton.CounterButton
 import com.example.main.imageCompose.SimpleImage
 import com.example.main.stateHoisting.Counter
@@ -88,6 +90,9 @@ import kotlin.random.Random
 class MainActivity : ComponentActivity() {
 
     private val dataHewan = getData()
+    //private val dataLamp = getLampData()
+
+    private var status by mutableStateOf(false)
     private var index by mutableIntStateOf(0)
     @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,9 +100,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             MainTheme {
                 
-                GaleriHewan(hewan = dataHewan[index], onClick = {
-                    index = if (index == dataHewan.size -1) 0 else index+1
-                })
+                //GaleriHewan(hewan = dataHewan[index], onClick = {
+                //    index = if (index == dataHewan.size -1) 0 else index+1
+                //})
+
+                SmartLamp(onClick = {
+                    status = !status
+                },status = status, getLamp = getLampData())
 
                 //var number by remember {
                 //    mutableIntStateOf(0)
@@ -205,6 +214,13 @@ class MainActivity : ComponentActivity() {
             Hewan("Domba", R.drawable.domba),
             Hewan("Kambing", R.drawable.kambing),
             Hewan("Sapi", R.drawable.sapi)
+        )
+    }
+
+    private fun getLampData():List<Lamp>{
+        return listOf(
+            Lamp("Matikan",R.drawable.light_on,"Lampu hidup"),
+            Lamp("Hidupkan",R.drawable.light_off, "Lampu mati")
         )
     }
 }
