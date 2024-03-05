@@ -75,6 +75,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
+import com.example.main.animalPictures.GaleriHewan
 import com.example.main.animalPictures.Hewan
 import com.example.main.counterButton.CounterButton
 import com.example.main.imageCompose.SimpleImage
@@ -86,12 +87,18 @@ import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
 
-    private val data = getData()
+    private val dataHewan = getData()
+    private var index by mutableIntStateOf(0)
     @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MainTheme {
+                
+                GaleriHewan(hewan = dataHewan[index], onClick = {
+                    index = if (index == dataHewan.size -1) 0 else index+1
+                })
+
                 //var number by remember {
                 //    mutableIntStateOf(0)
                 //}

@@ -68,4 +68,10 @@
     <string name="Reset">
         Reset
     </string>
+    <string name="gambar">
+        Gambar %1$s
+    </string>
+    <string name="lanjut">
+        Lanjut
+    </string>
 </resources>
