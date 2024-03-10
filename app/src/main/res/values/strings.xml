@@ -74,4 +74,13 @@
     <string name="lanjut">
         Lanjut
     </string>
+    <string name="mahasiswa">
+       Mahasiswa
+    </string>
+    <string name="dosen">
+        Dosen
+    </string>
+    <string name="pegawai">
+        Pegawai
+    </string>
 </resources>

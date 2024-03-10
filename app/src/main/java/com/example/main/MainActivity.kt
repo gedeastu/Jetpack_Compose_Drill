@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -21,19 +22,24 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
@@ -54,18 +60,23 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontVariation.width
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -73,15 +84,14 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.toSize
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
-import com.example.main.animalPictures.GaleriHewan
+import com.example.main.TP04.CheckBox
+import com.example.main.TP04.DropDown
+import com.example.main.TP04.RadioButtonCase
 import com.example.main.animalPictures.Hewan
 import com.example.main.animalPictures.challenge.Lamp
-import com.example.main.animalPictures.challenge.SmartLamp
-import com.example.main.counterButton.CounterButton
-import com.example.main.imageCompose.SimpleImage
-import com.example.main.stateHoisting.Counter
 import com.example.main.ui.theme.MainTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -94,19 +104,67 @@ class MainActivity : ComponentActivity() {
 
     private var status by mutableStateOf(false)
     private var index by mutableIntStateOf(0)
-    @OptIn(ExperimentalComposeUiApi::class)
+    @OptIn(ExperimentalComposeUiApi::class, ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MainTheme {
+
+                CheckBox()
+
+                //DropDown()
+
+                //val radioOptions = listOf(
+                //    stringResource(id = R.string.dosen),
+                //    stringResource(id = R.string.mahasiswa),
+                //    stringResource(id = R.string.pegawai)
+                //)
+                //val radioButton by remember {
+                //    mutableStateOf(radioOptions[0])
+                //}
+                //RadioButtonCase(title = "RadioButton", content = {modifier ->
+                //   Column(modifier = modifier
+                //        .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center){
+                //            Row(modifier = Modifier
+                //                .border(1.dp, Color.Gray, RoundedCornerShape(4.dp))
+                //               .width(350.dp)
+                //                .height(100.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceAround){
+                //                radioOptions.forEach{value ->
+                //                    RadioButtons(label = value, isSelected = radioButton == value)
+                //                }
+                //            }
+                //    }
+                //})
+
+                //var outlineTextField by remember {mutableStateOf("")}
+                //OutlinedTextFieldCase(title = "OutlinedTextField", content = { modifier ->
+                //    Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                //        OutlinedTextField(
+                //            modifier = modifier,
+                //            value = outlineTextField,
+                //            onValueChange ={
+                //                outlineTextField = it
+                //            },
+                //            label = {
+                //                Text(text = "Username")
+                //            },
+                //            isError = false,
+                //            singleLine = true,
+                //            leadingIcon = {
+                //                Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "Account")
+                //            },
+                //            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                //        )
+                //    }
+                //})
                 
                 //GaleriHewan(hewan = dataHewan[index], onClick = {
                 //    index = if (index == dataHewan.size -1) 0 else index+1
                 //})
 
-                SmartLamp(onClick = {
-                    status = !status
-                },status = status, getLamp = getLampData())
+                //SmartLamp(onClick = {
+                //    status = !status
+                //},status = status, getLamp = getLampData())
 
                 //var number by remember {
                 //    mutableIntStateOf(0)
@@ -430,6 +488,19 @@ fun SnackbarsTextFieldsButtons(
             }
         }
     )
+}
+
+//Radio Buttons
+@Composable
+fun RadioButtons(label:String, isSelected:Boolean){
+    Row(modifier = Modifier, verticalAlignment = Alignment.CenterVertically){
+        RadioButton(selected = isSelected, onClick = null)
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(start = 2.dp)
+        )
+    }
 }
 
 //Lists
