@@ -90,6 +90,8 @@ import androidx.constraintlayout.compose.ConstraintSet
 import com.example.main.TP04.CheckBox
 import com.example.main.TP04.DropDown
 import com.example.main.TP04.RadioButtonCase
+import com.example.main.TP04.ScrollableContent
+import com.example.main.TP04.SwitchCase
 import com.example.main.animalPictures.Hewan
 import com.example.main.animalPictures.challenge.Lamp
 import com.example.main.ui.theme.MainTheme
@@ -110,7 +112,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             MainTheme {
 
-                CheckBox()
+                ScrollableContent()
+
+                //SwitchCase()
+
+                //CheckBox()
 
                 //DropDown()
 
