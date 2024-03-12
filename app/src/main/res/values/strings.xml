@@ -34,37 +34,53 @@
         Tidak Boleh Kosong
     </string>
 
-    <!--Square Formula Strings values-->
-    <string name="square_formula_intro">
-        Mari menghitung luas dan keliling persegi panjang! Masukkan data berikut :
+    <!--Trapesium Formula Strings values-->
+    <string name="trapesium_formula_intro">
+        Mari menghitung luas dan keliling trapesium! Masukkan data berikut :
     </string>
-    <string name="panjang">
-        Panjang
+    <string name="sisiPertama">
+        Sisi 1
     </string>
-    <string name="Lebar">
-        Lebar
+    <string name="sisiKedua">
+        Sisi 2
     </string>
-    <string name="Hitung">
-        Hitung
+    <string name="sisiKetiga">
+        Sisi 3
     </string>
-    <string name="Luas">
-        Luas
+    <string name="sisiKeempat">
+        Sisi 4
     </string>
-    <string name="Luas_x">
+    <string name="tinggi">
+        Tinggi
+    </string>
+    <string name="Luas_Trapesium">
         Luas: %1$.2f
+    </string>
+    <string name="Keliling_Trapesium">
+        Keliling : %1$.2f
     </string>
     <string name="Keliling">
         Keliling
     </string>
-    <string name="Keliling_x">
-        Keliling: %1$.2f
+    <string name="Luas">
+        Luas
     </string>
     <string name="Reset">
         Reset
     </string>
+    <string name="Hitung">
+        Hitung
+    </string>
+    <string name="input_invalid_trapesium">
+        Tidak Boleh Kosong
+    </string>
+
+
     <string name="gambar">
         Gambar %1$s
     </string>
+
+
     <string name="lanjut">
         Lanjut
     </string>

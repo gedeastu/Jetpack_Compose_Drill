@@ -1,6 +1,5 @@
 package com.example.main
 
-import BMIScreen
 import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
@@ -76,6 +75,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import com.example.main.animalPictures.Hewan
 import com.example.main.animalPictures.challenge.Lamp
+import com.example.main.trapesiumFormula.TrapesiumFormulaScreen
 import com.example.main.ui.theme.MainTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -94,7 +94,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MainTheme {
 
-                BMIScreen()
+                //BMIScreen()
 
                 //ScrollableContent()
 
@@ -167,7 +167,7 @@ class MainActivity : ComponentActivity() {
 
                 //CounterButton()
 
-                //SquareFormulaScreen()
+                TrapesiumFormulaScreen()
 
                 //Simple Animation
                 //SimpleAnimations()
