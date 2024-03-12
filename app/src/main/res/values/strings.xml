@@ -18,12 +18,6 @@
     <string name="hitung">
         Hitung
     </string>
-    <string name="kg">
-        Kg
-    </string>
-    <string name="cm">
-        Cm
-    </string>
     <string name="bmi_x">
         BMI: %1$.2f
     </string>
