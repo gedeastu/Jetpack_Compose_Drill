@@ -94,7 +94,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MainTheme {
 
-                //BMIScreen()
+                TrapesiumFormulaScreen()
 
                 //ScrollableContent()
 

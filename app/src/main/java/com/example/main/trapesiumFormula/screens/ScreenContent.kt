@@ -180,7 +180,7 @@ fun TrapesiumFormulaScreenContent(modifier: Modifier) {
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Next
+                imeAction = ImeAction.Done
             ),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
