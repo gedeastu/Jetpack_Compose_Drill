@@ -261,10 +261,10 @@ fun ErrorHint(isError: Boolean){
     }
 }
 
-    private fun luasTrapesiumFormula(sisiPertama:Float, sisiKedua:Float, tinggi:Float) : Float {
-        return 0.5f * (sisiPertama + sisiKedua) * tinggi
-    }
+private fun luasTrapesiumFormula(sisiPertama:Float, sisiKedua:Float, tinggi:Float) : Float {
+    return 0.5f * (sisiPertama + sisiKedua) * tinggi
+}
 
-    private fun kelilingTrapesiumFormula(sisiPertama:Float, sisiKedua:Float, sisiKetiga: Float, sisiKeempat: Float) : Float{
-        return sisiPertama + sisiKedua + sisiKetiga + sisiKeempat
-    }
+private fun kelilingTrapesiumFormula(sisiPertama:Float, sisiKedua:Float, sisiKetiga: Float, sisiKeempat: Float) : Float{
+    return sisiPertama + sisiKedua + sisiKetiga + sisiKeempat
+}

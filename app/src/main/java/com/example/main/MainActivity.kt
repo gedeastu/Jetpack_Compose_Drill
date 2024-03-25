@@ -1,5 +1,6 @@
 package com.example.main
 
+import BMIScreen
 import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
@@ -46,6 +47,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -57,6 +59,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -75,6 +80,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import com.example.main.animalPictures.Hewan
 import com.example.main.animalPictures.challenge.Lamp
+import com.example.main.navigation.Navigation
+import com.example.main.navigation.RootNavGraph
+import com.example.main.scrollable.ToastNavigation
 import com.example.main.trapesiumFormula.TrapesiumFormulaScreen
 import com.example.main.ui.theme.MainTheme
 import kotlinx.coroutines.CoroutineScope
@@ -94,7 +102,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             MainTheme {
 
-                TrapesiumFormulaScreen()
+                //ToastNavigation()
+
+                //RootNavGraph()
+
+                //TrapesiumFormulaScreen()
 
                 //ScrollableContent()
 
@@ -103,6 +115,8 @@ class MainActivity : ComponentActivity() {
                 //CheckBox()
 
                 //DropDown()
+
+                //BMIScreen()
 
                 //val radioOptions = listOf(
                 //    stringResource(id = R.string.dosen),
@@ -167,7 +181,7 @@ class MainActivity : ComponentActivity() {
 
                 //CounterButton()
 
-                TrapesiumFormulaScreen()
+                //TrapesiumFormulaScreen()
 
                 //Simple Animation
                 //SimpleAnimations()
@@ -201,16 +215,17 @@ class MainActivity : ComponentActivity() {
                 //Lists(scrollState = rememberScrollState())
 
                 //Textfields, Buttons & Showing Snackbars
-//                                SnackbarsTextFieldsButtons(
-//                                    snackbarHostState = remember {
-//                                        SnackbarHostState()
-//                                    },
-//                                    coroutine = rememberCoroutineScope(),
-//                                    context = LocalContext.current,
-//                                    textFieldState = textFieldState,
-//                                    keyboardController = LocalSoftwareKeyboardController.current,
-//                                    focusManager = LocalFocusManager.current
-//                                )
+                var textFieldState = remember {
+                    mutableStateOf("")
+                }
+                SnackbarsTextFieldsButtons(
+                    snackbarHostState = remember { SnackbarHostState() },
+                    coroutine = rememberCoroutineScope(),
+                    context = LocalContext.current,
+                    textFieldState = textFieldState,
+                    keyboardController = LocalSoftwareKeyboardController.current,
+                    focusManager = LocalFocusManager.current
+                )
 
                 //State Compose
                 //Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
@@ -424,9 +439,6 @@ fun SnackbarsTextFieldsButtons(
     snackbarHostState: SnackbarHostState, coroutine: CoroutineScope, context: Context, textFieldState: MutableState<String>,
     keyboardController: SoftwareKeyboardController?, focusManager: FocusManager
 ){
-    var textFieldState = remember {
-        mutableStateOf("")
-    }
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) {
             Snackbar(
