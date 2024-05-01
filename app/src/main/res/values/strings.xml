@@ -93,4 +93,29 @@
     <string name="pegawai">
         Pegawai
     </string>
+
+
+    <string name="list_kosong">Belum ada data</string>
+    <string name="x_diklik">%1$s diklik!</string>
+    <string name="tambah_catatan">
+        Tambah catatan
+    </string>
+    <string name="tambah_error">
+        Belum bisa tambah catatan.
+    </string>
+    <string name="judul">
+        Judul
+    </string>
+    <string name="isi_catatan">
+        Isi Catatan
+    </string>
+    <string name="kembali">
+        Kembali
+    </string>
+    <string name="simpan">
+        Simpan
+    </string>
+    <string name="edit_catatan">
+        Ubah catatan
+    </string>
 </resources>

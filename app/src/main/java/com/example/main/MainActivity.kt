@@ -1,6 +1,5 @@
 package com.example.main
 
-import BMIScreen
 import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
@@ -27,6 +26,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
@@ -43,6 +43,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -78,12 +79,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
+import com.example.main.DarkModeDataStore.DarkMode
+import com.example.main.DarkModeDataStore.UIModePreference
 import com.example.main.animalPictures.Hewan
 import com.example.main.animalPictures.challenge.Lamp
-import com.example.main.navigation.Navigation
-import com.example.main.navigation.RootNavGraph
-import com.example.main.scrollable.ToastNavigation
-import com.example.main.trapesiumFormula.TrapesiumFormulaScreen
+import com.example.main.catatan.navigation.SetupNavGraph
 import com.example.main.ui.theme.MainTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -91,7 +91,7 @@ import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
 
-    private val dataHewan = getData()
+    //private val dataHewan = getData()
     //private val dataLamp = getLampData()
 
     private var status by mutableStateOf(false)
@@ -100,7 +100,15 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MainTheme {
+            val isDarkMode by UIModePreference(LocalContext.current).themeFlow.collectAsState(
+                initial = false
+            )
+            MainTheme(darkTheme = isDarkMode){
+
+                DarkMode()
+                //SetupNavGraph()
+
+                //BannerAds(modifier = Modifier.fillMaxSize(),)
 
                 //ToastNavigation()
 
@@ -215,17 +223,19 @@ class MainActivity : ComponentActivity() {
                 //Lists(scrollState = rememberScrollState())
 
                 //Textfields, Buttons & Showing Snackbars
-                var textFieldState = remember {
-                    mutableStateOf("")
-                }
-                SnackbarsTextFieldsButtons(
-                    snackbarHostState = remember { SnackbarHostState() },
-                    coroutine = rememberCoroutineScope(),
-                    context = LocalContext.current,
-                    textFieldState = textFieldState,
-                    keyboardController = LocalSoftwareKeyboardController.current,
-                    focusManager = LocalFocusManager.current
-                )
+                //                                var textFieldState = remember {
+                //                                    mutableStateOf("")
+                //                                }
+                //                                SnackbarsTextFieldsButtons(
+                //                                    snackbarHostState = remember { SnackbarHostState() },
+                //                                    coroutine = rememberCoroutineScope(),
+                //                                    context = LocalContext.current,
+                //                                    textFieldState = textFieldState,
+                //                                    keyboardController = LocalSoftwareKeyboardController.current,
+                //                                    focusManager = LocalFocusManager.current
+                //                                )
+
+                Dialog()
 
                 //State Compose
                 //Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
@@ -268,22 +278,22 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-    private fun getData(): List<Hewan>{
-        return listOf(
-            Hewan("Ayam", R.drawable.ayam),
-            Hewan("Bebek", R.drawable.bebek),
-            Hewan("Domba", R.drawable.domba),
-            Hewan("Kambing", R.drawable.kambing),
-            Hewan("Sapi", R.drawable.sapi)
-        )
-    }
-
-    private fun getLampData():List<Lamp>{
-        return listOf(
-            Lamp("Matikan",R.drawable.light_on,"Lampu hidup"),
-            Lamp("Hidupkan",R.drawable.light_off, "Lampu mati")
-        )
-    }
+    //    private fun getData(): List<Hewan>{
+    //        return listOf(
+    //            Hewan("Ayam", R.drawable.ayam),
+    //            Hewan("Bebek", R.drawable.bebek),
+    //            Hewan("Domba", R.drawable.domba),
+    //            Hewan("Kambing", R.drawable.kambing),
+    //            Hewan("Sapi", R.drawable.sapi)
+    //        )
+    //    }
+    //
+    //    private fun getLampData():List<Lamp>{
+    //        return listOf(
+    //            Lamp("Matikan",R.drawable.light_on,"Lampu hidup"),
+    //            Lamp("Hidupkan",R.drawable.light_off, "Lampu mati")
+    //        )
+    //    }
 }
 
 @Composable
@@ -439,6 +449,9 @@ fun SnackbarsTextFieldsButtons(
     snackbarHostState: SnackbarHostState, coroutine: CoroutineScope, context: Context, textFieldState: MutableState<String>,
     keyboardController: SoftwareKeyboardController?, focusManager: FocusManager
 ){
+    val openDialog = remember {
+        mutableStateOf(false)
+    }
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) {
             Snackbar(
@@ -469,21 +482,47 @@ fun SnackbarsTextFieldsButtons(
                     }
                 )
                 Button(onClick = {
-                    coroutine.launch {
-                        val result = snackbarHostState.showSnackbar(
-                            message = "Hello ${textFieldState.value}",
-                            actionLabel = "Show the Toast",
-                            duration = SnackbarDuration.Long,
-                            withDismissAction = true
-                        )
-                        if (result == SnackbarResult.ActionPerformed){
-                            Toast.makeText(context,"Hello Welcome Back",Toast.LENGTH_LONG).show()
-                        }
-                    }
-                    keyboardController?.hide()
-                    focusManager.clearFocus()
+                    openDialog.value = true
                 }) {
                     Text(text = "Show the snackbar message")
+                }
+                if (openDialog.value){
+                    AlertDialog(
+                        onDismissRequest = { openDialog.value = false },
+                        confirmButton = {
+                                        Button(onClick = {
+                                            openDialog.value = false
+                                            coroutine.launch {
+                                                val result = snackbarHostState.showSnackbar(
+                                                    message = "Hello ${textFieldState.value}",
+                                                    actionLabel = "Show the Toast",
+                                                    duration = SnackbarDuration.Long,
+                                                    withDismissAction = true
+                                                )
+                                                if (result == SnackbarResult.ActionPerformed){
+                                                    Toast.makeText(context,"Hello Welcome Back",Toast.LENGTH_LONG).show()
+                                                }
+                                            }
+                                            keyboardController?.hide()
+                                            focusManager.clearFocus()
+                                        }) {
+                                            Text(text = "Yes")
+                                        }
+                        },
+                        dismissButton = {
+                                        Button(onClick = {
+                                            openDialog.value = false
+                                        }) {
+                                            Text(text = "No")
+                                        }   
+                        },
+                        title = {
+                            Text(text = "Are you sure?")
+                        },
+                        text = {
+                            Text(text = "want to save your name ${textFieldState.value} in snackbar?")
+                        }
+                    )
                 }
             }
         }
@@ -554,6 +593,53 @@ fun Lists(scrollState:ScrollState){
             })
     }
 }
+
+@Composable
+fun Dialog(){
+    var show = remember {
+        mutableStateOf(false)
+    }
+    var message = remember {
+        mutableStateOf("")
+    }
+    if (show.value){
+        MyDialog(onDismiss = {
+            show.value = false
+            message.value = it
+        })
+    }
+    Column {
+        Text(text = "")
+        Button(onClick = { show.value = true }) {
+            Text(text = "Show Dialog")
+        }
+    }
+}
+
+@Composable
+fun MyDialog(onDismiss:(value:String)->Unit){
+    val name = remember {
+        mutableStateOf("")
+    }
+    androidx.compose.ui.window.Dialog(onDismissRequest = { onDismiss("") }) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
+            TextField(value = name.value, onValueChange = { name.value=it })
+            Row(
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ){
+                Button(onClick = { onDismiss("") }) {
+                    Text(text = "Cancel")
+                }
+                Button(onClick = { onDismiss(name.value) }) {
+                    Text(text = "Save")
+                }
+            }
+        }
+    }
+}
+
 
 //ConstraintLayout
 @Composable
